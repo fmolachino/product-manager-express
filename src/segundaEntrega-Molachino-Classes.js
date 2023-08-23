@@ -6,6 +6,8 @@ class ProductManager{
 
     static #idProvider = 0;
 
+    
+
     constructor(path) {
         this.#productList = [];
         this.path = path;
@@ -94,11 +96,11 @@ class ProductManager{
                 ProductManager.#idProvider
             );
         } catch (error) {
-            // A terminar, quizas puedo arrancar una file vacia...
+            // TODO, maybe initialice an empty file?
         }
     }
 
-
+    
 }
 
 
@@ -122,32 +124,34 @@ class Product{
 
 //Testing it out:
 
-const path = 'products.json'; 
+const path = 'products.json';
 let productManager = new ProductManager(path);
 
 
-//Agrego un par de productos, solo sirve para probar estas 3 lineas
-productManager.addProduct("producto 1", "description", 99, "sin-imagen", "a", 10)
-productManager.addProduct("producto 2", "description", 90, "sin-imagen", "b", 10)
-productManager.addProduct("producto 3", "description", 88, "sin-imagen", "c", 10)
-productManager.addProduct("producto 4", "description", 80, "sin-imagen", "d", 10)
-productManager.addProduct("producto 5", "description", 80, "sin-imagen", "e", 10)
-productManager.addProduct("producto 6", "description", 80, "sin-imagen", "f", 10)
-productManager.addProduct("producto 7", "description", 80, "sin-imagen", "g", 10)
-productManager.addProduct("producto 8", "description", 80, "sin-imagen", "h", 10)
-productManager.addProduct("producto 9", "description", 80, "sin-imagen", "i", 10)
-productManager.addProduct("producto 10", "description", 80, "sin-imagen", "j", 10)
+//Adding a few products
+// productManager.addProduct("producto 1", "description", 99, "sin-imagen", "a", 10)
+// productManager.addProduct("producto 2", "description", 90, "sin-imagen", "b", 10)
+// productManager.addProduct("producto 3", "description", 88, "sin-imagen", "c", 10)
+// productManager.addProduct("producto 4", "description", 80, "sin-imagen", "d", 10)
+// productManager.addProduct("producto 5", "description", 80, "sin-imagen", "e", 10)
+// productManager.addProduct("producto 6", "description", 80, "sin-imagen", "f", 10)
+// productManager.addProduct("producto 7", "description", 80, "sin-imagen", "g", 10)
+// productManager.addProduct("producto 8", "description", 80, "sin-imagen", "h", 10)
+// productManager.addProduct("producto 9", "description", 80, "sin-imagen", "i", 10)
+// productManager.addProduct("producto 10", "description", 80, "sin-imagen", "j", 10)
 
 
-
-
-
-
+let products = productManager.getProducts()
 
 // Save data to file when the process exits
 process.on('exit', () => {
     productManager.saveToFile(); 
 });
+
+
+
+module.exports={products}
+
 
 
 
