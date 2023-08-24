@@ -34,6 +34,27 @@ app.get('/products', (req,res)=>{
 
 })
 
+app.get('/products/:id', (req,res)=>{
+
+    let id = parseInt(req.params.id)
+
+    if (isNaN(id)) {
+        res.json({status: 'error', message: 'Id must be a numerical value, please try again.'})
+        return
+    }
+
+    let productById=products.filter(product=>product.id===id)
+
+    if(productById.length>0){
+        res.json({status:'ok', data:productById})
+    } else {
+        res.json({status: 'error', message: `Product with id: ${id} doesn't exists.`})
+        
+    }
+    
+
+})
+
 
 
 
