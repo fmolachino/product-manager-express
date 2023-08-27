@@ -1,0 +1,9 @@
+//It will return the directory absolute path. It works as |"type:", "module"|
+
+import {fileURLToPath} from 'url';
+import {dirname} from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export default __dirname;
