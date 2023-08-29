@@ -1,7 +1,11 @@
-const express=require('express')
+//const express=require('express')
+
+import express from 'express';
 
 //importing variable from a difrent .js file
-const products = require('./productsHandler').products
+//const products = require('./productsHandler').products
+
+import { products } from './productsHandler.js';
 
 
 

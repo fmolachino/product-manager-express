@@ -1,11 +1,11 @@
-const fs = require('fs');
+//const fs = require('fs');
 
-//import fs from 'fs';
+import fs from 'fs';
 
-const path = require('path');
+//const path = require('path');
 
-//import path from 'path'
-//import __dirname from './utils.js'
+import path from 'path'
+import __dirname from './utils.js'
 
 class ProductManager{
 
@@ -157,9 +157,9 @@ process.on('exit', () => {
 
 
 
-module.exports={products}
+//module.exports={products}
 
-//export{products}
+export{products}
 
 
 
