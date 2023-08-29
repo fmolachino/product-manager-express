@@ -1,7 +1,9 @@
 const express=require('express')
 
 //importing variable from a difrent .js file
-const products = require('./segundaEntrega-Molachino-Classes').products
+const products = require('./productsHandler').products
+
+
 
 const PORT = 8080
 

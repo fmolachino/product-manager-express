@@ -1,5 +1,12 @@
 const fs = require('fs');
 
+//import fs from 'fs';
+
+const path = require('path');
+
+//import path from 'path'
+//import __dirname from './utils.js'
+
 class ProductManager{
 
     #productList = [];
@@ -124,8 +131,8 @@ class Product{
 
 //Testing it out:
 
-const path = 'products.json';
-let productManager = new ProductManager(path);
+const url = path.join(__dirname, 'files', 'products.json');
+let productManager = new ProductManager(url);
 
 
 //Adding a few products
@@ -141,7 +148,7 @@ let productManager = new ProductManager(path);
 // productManager.addProduct("producto 10", "description", 80, "sin-imagen", "j", 10)
 
 
-let products = productManager.getProducts()
+const products = productManager.getProducts()
 
 // Save data to file when the process exits
 process.on('exit', () => {
@@ -151,6 +158,9 @@ process.on('exit', () => {
 
 
 module.exports={products}
+
+//export{products}
+
 
 
 
