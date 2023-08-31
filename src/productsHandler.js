@@ -7,7 +7,7 @@ import fs from 'fs';
 import path from 'path'
 import __dirname from './utils.js'
 
-class ProductManager{
+export class ProductManager{
 
     #productList = [];
 
@@ -21,12 +21,12 @@ class ProductManager{
         this.loadFromFile(); // When instanciated, it loads the file, so whenever i create a ProductManager...
     }
 
-    addProduct(title, description, price, thumbnail, code, stock){
+    addProduct(title, description, price, thumbnail, code, stock, category){
         if(!this.isCodeAvailable(code)){
             throw new Error("The provided code: " +code+ " is already in use.");
         }
         let id = this.getIdAndIncrease()
-        let product = new Product(title, description, price, thumbnail, code, stock, id)
+        let product = new Product(title, description, price, thumbnail, code, stock, id, category)
         this.#productList.push(product)
 
     }
@@ -95,7 +95,9 @@ class ProductManager{
                         p.thumbnail,
                         p.code,
                         p.stock,
-                        p.id
+                        p.id,
+                        p.status,
+                        p.category
                     )
             );
             ProductManager.#idProvider = this.#productList.reduce(
@@ -115,7 +117,7 @@ class ProductManager{
 
 class Product{
 
-    constructor(title, description, price, thumbnail, code, stock, id){
+    constructor(title, description, price, thumbnail, code, stock, id, category){
 
         this.title=title
         this.description=description
@@ -123,7 +125,9 @@ class Product{
         this.thumbnail=thumbnail
         this.code=code
         this.stock=stock
+        this.category=category
         this.id=id
+        this.status=true
     }
 
 
@@ -136,16 +140,16 @@ let productManager = new ProductManager(url);
 
 
 //Adding a few products
-// productManager.addProduct("producto 1", "description", 99, "sin-imagen", "a", 10)
-// productManager.addProduct("producto 2", "description", 90, "sin-imagen", "b", 10)
-// productManager.addProduct("producto 3", "description", 88, "sin-imagen", "c", 10)
-// productManager.addProduct("producto 4", "description", 80, "sin-imagen", "d", 10)
-// productManager.addProduct("producto 5", "description", 80, "sin-imagen", "e", 10)
-// productManager.addProduct("producto 6", "description", 80, "sin-imagen", "f", 10)
-// productManager.addProduct("producto 7", "description", 80, "sin-imagen", "g", 10)
-// productManager.addProduct("producto 8", "description", 80, "sin-imagen", "h", 10)
-// productManager.addProduct("producto 9", "description", 80, "sin-imagen", "i", 10)
-// productManager.addProduct("producto 10", "description", 80, "sin-imagen", "j", 10)
+// productManager.addProduct("producto 1", "description", 99, "sin-imagen", "a", 10, "category")
+// productManager.addProduct("producto 2", "description", 90, "sin-imagen", "b", 10, "category")
+// productManager.addProduct("producto 3", "description", 88, "sin-imagen", "c", 10, "category")
+// productManager.addProduct("producto 4", "description", 80, "sin-imagen", "d", 10, "category")
+// productManager.addProduct("producto 5", "description", 80, "sin-imagen", "e", 10, "category")
+// productManager.addProduct("producto 6", "description", 80, "sin-imagen", "f", 10, "category")
+// productManager.addProduct("producto 7", "description", 80, "sin-imagen", "g", 10, "category")
+// productManager.addProduct("producto 8", "description", 80, "sin-imagen", "h", 10, "category")
+// productManager.addProduct("producto 9", "description", 80, "sin-imagen", "i", 10, "category")
+// productManager.addProduct("producto 10", "description", 80, "sin-imagen", "j", 10, "category")
 
 
 const products = productManager.getProducts()

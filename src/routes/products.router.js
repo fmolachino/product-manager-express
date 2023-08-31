@@ -1,8 +1,11 @@
 import {Router} from 'express';
+import path from 'path'
 
 export const router = Router();
 
 import { products } from '../productsHandler.js';
+import __dirname from '../utils.js'
+import { ProductManager } from '../productsHandler.js';
 
 
 router.get('/', (req,res)=>{
@@ -51,6 +54,35 @@ router.get('/:id', (req,res)=>{
     
 
 })
+
+//Adding a product
+router.post('/', (req,res)=>{
+
+    let {title, description, code, price, stock, category, thumbnail} = req.body;
+
+    if(!title || !description || !code || !price || !stock || !category || !thumbnail)
+        return res.status(400).json({error:'Falta ingresar algun campo del producto'})
+
+    
+
+
+    // let productsPath = path.join(__dirname, '..', 'files', 'products.json');
+    // let productManager = new ProductManager(productsPath)
+    // productManager.addProduct(title, description, price, thumbnail, code, stock, category)
+    // productManager.saveToFile(); 
+                             
+    
+
+})
+
+
+// "title": "producto 1",
+// 		"description": "description",
+// 		"price": 99,
+// 		"thumbnail": "sin-imagen",
+// 		"code": "a",
+// 		"stock": 10,
+// 		"id": 0
 
 
 
