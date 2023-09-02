@@ -138,7 +138,7 @@ export class ProductManager{
             } else {
                 fs.writeFileSync(this.path, JSON.stringify(this.#productList, null, 2));
             }
-            console.log('File saved successfully.');
+            console.log('Products file saved successfully.');
         } catch (error) {
             console.error('Error saving file:', error.message);
         }
