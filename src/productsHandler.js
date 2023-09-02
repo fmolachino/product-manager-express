@@ -18,6 +18,7 @@ export class ProductManager{
     constructor(path) {
         this.#productList = [];
         this.path = path;
+        
         this.loadFromFile(); // When instanciated, it loads the file, so whenever i create a ProductManager...
     }
 
@@ -28,6 +29,9 @@ export class ProductManager{
         let id = this.getIdAndIncrease()
         let product = new Product(title, description, price, thumbnail, code, stock, id, category)
         this.#productList.push(product)
+        console.log('Added product succesfully');
+        console.log(product);
+        this.saveToFile();        
 
     }
 
@@ -53,14 +57,53 @@ export class ProductManager{
         if(index !== -1) {
             this.#productList[index] = toUpdateProduct;
             this.saveToFile();
+        }
+        if(!this.isCodeAvailable(toUpdateProduct.code)){
+            throw new Error("The code: " + toUpdateProduct.code + " is already taken.")
         } else {
             throw new Error("Product with id: " + id + " doesn't exist.")
         }
+    }
+
+    updateProductFromPage(oldProductIndex, newProduct){
+
+        let oldProduct = this.#productList[oldProductIndex];
+        
+
+        for (const key in newProduct) {
+            if (oldProduct.hasOwnProperty(key)) {
+                oldProduct[key] = newProduct[key];
+                console.log(newProduct[key]);
+            }
+        }
+
+        this.saveToFile();
+
+    }
+
+    //TODO control for non existent id
+    deleteProduct(id){
+
+        let prodIndex = this.getIndexFromId(id);
+
+        this.#productList.splice(prodIndex, 1);
+
+        //Rename id so if the last element is remove it can be used again
+        if((ProductManager.#idProvider-1)===id){
+            ProductManager.setId(id);
+        }
+
+        this.saveToFile();
 
     }
 
     isCodeAvailable(code){
         return !this.#productList.some(product => product.code === code)
+    }
+
+    getIndexFromId(id){
+        const index = this.#productList.findIndex(product => product.id === id)
+        return index
     }
 
     getIdAndIncrease(){
@@ -73,13 +116,32 @@ export class ProductManager{
         return ProductManager.#idProvider;
     }
 
+    static setId(newId){
+        ProductManager.#idProvider = newId;
+    }
+
     static increaseId(){
         ProductManager.#idProvider +=1;
     }
 
     saveToFile() {
-        const data = JSON.stringify(this.#productList, null, '\t');
-        fs.writeFileSync(this.path, data, 'utf-8');
+        try {
+            if (!this.#productList) {
+                console.log(typeof this.#productList);
+                
+                console.error('this.productsList is undefined.');
+                return;
+            }
+
+            if (!fs.existsSync(this.path)) {
+                fs.writeFileSync(this.path, JSON.stringify(this.#productList));
+            } else {
+                fs.writeFileSync(this.path, JSON.stringify(this.#productList, null, 2));
+            }
+            console.log('File saved successfully.');
+        } catch (error) {
+            console.error('Error saving file:', error.message);
+        }
     }
 
     loadFromFile() {
@@ -102,11 +164,16 @@ export class ProductManager{
             );
             ProductManager.#idProvider = this.#productList.reduce(
                 (maxId, product) => Math.max(maxId, product.id),
-                ProductManager.#idProvider
+                ProductManager.#idProvider,
             );
+            ProductManager.#idProvider =  ProductManager.#idProvider +1
         } catch (error) {
             // TODO, maybe initialice an empty file?
         }
+    }
+
+    getThisProducts(){
+        return this.#productList
     }
 
     
@@ -115,7 +182,7 @@ export class ProductManager{
 
 
 
-class Product{
+export class Product{
 
     constructor(title, description, price, thumbnail, code, stock, id, category){
 
@@ -135,35 +202,36 @@ class Product{
 
 //Testing it out:
 
-const url = path.join(__dirname, 'files', 'products.json');
-let productManager = new ProductManager(url);
+// const url = path.join(__dirname, 'files', 'products.json');
+
+// let productManager = new ProductManager(url);
 
 
-//Adding a few products
-// productManager.addProduct("producto 1", "description", 99, "sin-imagen", "a", 10, "category")
-// productManager.addProduct("producto 2", "description", 90, "sin-imagen", "b", 10, "category")
-// productManager.addProduct("producto 3", "description", 88, "sin-imagen", "c", 10, "category")
-// productManager.addProduct("producto 4", "description", 80, "sin-imagen", "d", 10, "category")
-// productManager.addProduct("producto 5", "description", 80, "sin-imagen", "e", 10, "category")
-// productManager.addProduct("producto 6", "description", 80, "sin-imagen", "f", 10, "category")
-// productManager.addProduct("producto 7", "description", 80, "sin-imagen", "g", 10, "category")
-// productManager.addProduct("producto 8", "description", 80, "sin-imagen", "h", 10, "category")
-// productManager.addProduct("producto 9", "description", 80, "sin-imagen", "i", 10, "category")
-// productManager.addProduct("producto 10", "description", 80, "sin-imagen", "j", 10, "category")
+// //Adding a few products
+// //productManager.addProduct("producto 1", "description", 99, "sin-imagen", "a", 10, "category")
+// // productManager.addProduct("producto 2", "description", 90, "sin-imagen", "b", 10, "category")
+// // productManager.addProduct("producto 3", "description", 88, "sin-imagen", "c", 10, "category")
+// // productManager.addProduct("producto 4", "description", 80, "sin-imagen", "d", 10, "category")
+// // productManager.addProduct("producto 5", "description", 80, "sin-imagen", "e", 10, "category")
+// // productManager.addProduct("producto 6", "description", 80, "sin-imagen", "f", 10, "category")
+// // productManager.addProduct("producto 7", "description", 80, "sin-imagen", "g", 10, "category")
+// // productManager.addProduct("producto 8", "description", 80, "sin-imagen", "h", 10, "category")
+// // productManager.addProduct("producto 9", "description", 80, "sin-imagen", "i", 10, "category")
+// // productManager.addProduct("producto 10", "description", 80, "sin-imagen", "j", 10, "category")
 
 
-const products = productManager.getProducts()
+// const products = productManager.getProducts()
 
-// Save data to file when the process exits
-process.on('exit', () => {
-    productManager.saveToFile(); 
-});
+// // Save data to file when the process exits
+// process.on('exit', () => {
+//     productManager.saveToFile(); 
+// });
 
 
 
-//module.exports={products}
+// //module.exports={products}
 
-export{products}
+// export{products}
 
 
 

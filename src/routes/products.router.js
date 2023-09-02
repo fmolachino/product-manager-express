@@ -3,9 +3,16 @@ import path from 'path'
 
 export const router = Router();
 
-import { products } from '../productsHandler.js';
+//import { products } from '../productsHandler.js';
 import __dirname from '../utils.js'
 import { ProductManager } from '../productsHandler.js';
+import { Product } from '../productsHandler.js';
+
+let productsPath = path.join(__dirname, 'files', 'products.json');
+
+const productManager = new ProductManager(productsPath)
+const products = productManager.getProducts();
+
 
 
 router.get('/', (req,res)=>{
@@ -18,8 +25,9 @@ router.get('/', (req,res)=>{
         //console.log(limit, typeof limitOfProducts)
 
         if (limitOfProducts<=products.length) {
-            const slicedProducts = products.slice(0, limitOfProducts)
+            const slicedProducts =products.slice(0, limitOfProducts)         
             res.json({status:'ok', data:slicedProducts})
+            
         } else if (limitOfProducts===0){
             res.json({status:'ok', data:products})
         }else {
@@ -63,16 +71,57 @@ router.post('/', (req,res)=>{
     if(!title || !description || !code || !price || !stock || !category || !thumbnail)
         return res.status(400).json({error:'Falta ingresar algun campo del producto'})
 
+    productManager.addProduct(title, description, price, thumbnail, code, stock, category)
+
+    return res.status(200).json({message:`The new product: ${title}, has been added succesfully.`})
+
+})
+
+
+//Updating an existing product
+router.put('/:id', (req,res)=>{
+
+    let id = parseInt(req.params.id)
+
+    if (isNaN(id)) {
+        res.json({status: 'error', message: 'Id must be a numerical value, please try again.'})
+        return
+    }
+
+    let {title, description, code, price, stock, category, thumbnail} = req.body;
+
+    if(!title || !description || !code || !price || !stock || !category || !thumbnail)
+        return res.status(400).json({error:'Falta ingresar algun campo del producto'})
+
+    let newProduct = new Product(title, description, price, thumbnail, code, stock, id, category)
+
+    let oldProdIndex = productManager.getProducts().findIndex(product => product.id === id)    
     
+    productManager.updateProductFromPage(oldProdIndex, newProduct)
+
+    return res.status(200).json({message:`The Product: ${title}, has been updated succesfully.`})
+
+})
 
 
-    // let productsPath = path.join(__dirname, '..', 'files', 'products.json');
-    // let productManager = new ProductManager(productsPath)
-    // productManager.addProduct(title, description, price, thumbnail, code, stock, category)
-    // productManager.saveToFile(); 
-                             
-    
+//Deleting an existing product
+router.delete('/:id', (req,res)=>{
 
+    let id = parseInt(req.params.id)
+
+    if (isNaN(id)) {
+        res.json({status: 'error', message: 'Id must be a numerical value, please try again.'})
+        return
+    }
+
+    let productToDeleteTitle = productManager.getProductById(id).title;
+
+    productManager.deleteProduct(id);
+
+    return res.status(200).json({message:`The Product: ${productToDeleteTitle}, with id: ${id}, has been Deleted succesfully.`})
+
+
+    //return res.status(400).json({error:'Falta ingresar algun campo del producto'})
 })
 
 
