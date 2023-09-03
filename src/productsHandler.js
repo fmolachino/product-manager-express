@@ -1,8 +1,7 @@
-//const fs = require('fs');
+//TODO Finish controlers for put and post methods.
 
 import fs from 'fs';
 
-//const path = require('path');
 
 import path from 'path'
 import __dirname from './utils.js'

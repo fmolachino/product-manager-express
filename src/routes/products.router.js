@@ -73,7 +73,7 @@ router.post('/', (req,res)=>{
 
     productManager.addProduct(title, description, price, thumbnail, code, stock, category)
 
-    return res.status(200).json({message:`The new product: ${title}, has been added succesfully.`})
+    res.status(200).json({message:`The new product: ${title}, has been added succesfully.`})
 
 })
 
@@ -99,7 +99,7 @@ router.put('/:id', (req,res)=>{
     
     productManager.updateProductFromPage(oldProdIndex, newProduct)
 
-    return res.status(200).json({message:`The Product: ${title}, has been updated succesfully.`})
+    res.status(200).json({message:`The Product: ${title}, has been updated succesfully.`})
 
 })
 
@@ -118,20 +118,10 @@ router.delete('/:id', (req,res)=>{
 
     productManager.deleteProduct(id);
 
-    return res.status(200).json({message:`The Product: ${productToDeleteTitle}, with id: ${id}, has been Deleted succesfully.`})
+    res.status(200).json({message:`The Product: ${productToDeleteTitle}, with id: ${id}, has been Deleted succesfully.`})
 
-
-    //return res.status(400).json({error:'Falta ingresar algun campo del producto'})
 })
 
-
-// "title": "producto 1",
-// 		"description": "description",
-// 		"price": 99,
-// 		"thumbnail": "sin-imagen",
-// 		"code": "a",
-// 		"stock": 10,
-// 		"id": 0
 
 
 

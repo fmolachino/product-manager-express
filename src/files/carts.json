@@ -1,0 +1,18 @@
+[
+  {
+    "products": {
+      "title": "producto 10",
+      "description": "description",
+      "price": 80,
+      "thumbnail": [
+        "sin-imagen"
+      ],
+      "code": "j",
+      "stock": 10,
+      "category": "category00",
+      "id": 9,
+      "status": true
+    },
+    "id": 0
+  }
+]

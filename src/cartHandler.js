@@ -1,3 +1,5 @@
+//TODO Finish controlers for put and post methods.
+
 import fs from 'fs';
 
 import path from 'path'
@@ -29,8 +31,14 @@ export class CartManager{
         
     }
 
-    getProductById(id){
-        
+    getCartById(id){
+        const cart = this.#cartList.find(cart => cart.id === id);
+
+        if (cart) {
+            return cart;
+        } else {
+            throw new Error("Cart with id: " + id + " doesn't exist.");
+        }
     }
 
     updateProduct(id, toUpdateProduct){
@@ -102,15 +110,8 @@ export class CartManager{
             this.#cartList = products.map(
                 p =>
                     new Cart(
-                        p.title,
-                        p.description,
-                        p.price,
-                        p.thumbnail,
-                        p.code,
-                        p.stock,
                         p.id,
-                        p.status,
-                        p.category
+                        p.products
                     )
             );
             CartManager.#cartIdProvider = this.#cartList.reduce(
