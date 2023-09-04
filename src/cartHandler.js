@@ -45,23 +45,25 @@ export class CartManager{
         
     }
 
-    updateProductFromPage(oldProductIndex, newProduct){
-
-
+    addProductViaCid(cid, pid){
+        let cart = this.getCartById(cid)
+        
+        const productAlreadyInCart = cart.products.some(product => product.pid === pid)
+        
+        if(productAlreadyInCart){
+            let product = cart.products.find(product => product.pid === pid);
+            product.quantity+=1;
+        } else{
+            let productToAdd = {pid, quantity:1}
+            cart.products.push(productToAdd)
+        }
+        this.saveToFile();
     }
 
     //TODO control for non existent id
     deleteProduct(id){
 
        
-    }
-
-    isCodeAvailable(code){
-       
-    }
-
-    getIndexFromId(id){
-        
     }
 
     getIdAndIncrease(){
@@ -106,16 +108,16 @@ export class CartManager{
     loadFromFile() {
         try {
             const data = fs.readFileSync(this.path, 'utf-8');
-            const products = JSON.parse(data);
-            this.#cartList = products.map(
-                p =>
+            const carts = JSON.parse(data);
+            this.#cartList = carts.map(
+                c =>
                     new Cart(
-                        p.id,
-                        p.products
+                        c.id,
+                        c.products
                     )
             );
             CartManager.#cartIdProvider = this.#cartList.reduce(
-                (maxId, product) => Math.max(maxId, product.id),
+                (maxId, cart) => Math.max(maxId, cart.id),
                 CartManager.#cartIdProvider,
             );
             CartManager.#cartIdProvider =  CartManager.#cartIdProvider +1
