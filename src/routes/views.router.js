@@ -19,12 +19,20 @@ const products = productManager.getProducts();
 
 //calling example for handlebars:
 router.get('/',(req,res)=>{
-    let name = 'Example'
-
+    
     res.setHeader('Content-Type', 'text/html');
     res.status(200).render('home', {
         products,
         title:'Home Page - All Products'
+    });
+})
+
+router.get('/realtimeproducts', (req, res) => {
+    
+    res.setHeader('Content-Type', 'text/html');
+    res.status(200).render('realTimeProducts', {
+        //...
+        //...
     });
 })
 //-------------------Handlebars try--------------
