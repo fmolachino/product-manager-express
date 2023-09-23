@@ -15,6 +15,16 @@ import path from 'path';
 
 import __dirname from './utils.js';
 
+import { ProductManager } from './productsHandler.js';
+
+
+//--------------------------------
+let productsPath = path.join(__dirname, 'files', 'products.json');
+
+const productManager = new ProductManager(productsPath)
+const products = productManager.getProducts();
+//--------------------------------
+
 const PORT = 8080
 
 const app=express()
@@ -31,12 +41,13 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname, '/public')))
 
 
-
+//root paths:
 app.use('/products', productsRouter)
 
 app.use('/carts', cartsRouter)
 
 app.use('/', viewsRouter)
+
 
 
 const serverExpress = app.listen(PORT, ()=>{
@@ -46,6 +57,22 @@ const serverExpress = app.listen(PORT, ()=>{
 const serverSocket=new Server(serverExpress)
 
 serverSocket.on('connection', (socket)=>{
-    console.log(`Client connected as ${socket.id}`);
+    //console.log(`Client connected as ${socket.id}`);
+
+    // socket.emit('welcome', {message: "Message from server socket's welcome"})
+
+    // socket.on('identificacion', name=>{
+    //     console.log(`${name}, has been connected.`);
+    //     socket.emit('idCorrecto', {message:`Hello ${name}, welcome..!!!`})
+        
+    // })
+
+    
     
 })
+
+setInterval(() => {
+    serverSocket.emit('updatedProducts', products, new Date().toUTCString())
+    console.log(products[0].title);
+    
+}, 3000)
