@@ -1,17 +1,19 @@
 import {Router} from 'express';
 import path from 'path'
+import { testModel } from "../dao/models/test.model.js";
+import mongoose from "mongoose";
 
 export const router = Router();
 
 //import { products } from '../productsHandler.js';
 import __dirname from '../utils.js'
-import { ProductManager } from '../productsHandler.js';
-import { Product } from '../productsHandler.js';
+import { ProductManager } from '../dao/dbHandlers/productsHandler.js';
+//import { Product } from '../dao/dbHandlers/productsHandler.js';
 
 let productsPath = path.join(__dirname, 'files', 'products.json');
 
-const productManager = new ProductManager(productsPath)
-const products = productManager.getProducts();
+const productManager = new ProductManager()
+//const products = productManager.getProducts();
 
 
 
@@ -69,7 +71,7 @@ router.post('/', (req,res)=>{
     let {title, description, code, price, stock, category, thumbnail} = req.body;
 
     if(!title || !description || !code || !price || !stock || !category || !thumbnail)
-        return res.status(400).json({error:'Falta ingresar algun campo del producto'})
+        return res.status(400).json({error:'An information field is missing'})
 
     productManager.addProduct(title, description, price, thumbnail, code, stock, category)
 
@@ -91,13 +93,11 @@ router.put('/:id', (req,res)=>{
     let {title, description, code, price, stock, category, thumbnail} = req.body;
 
     if(!title || !description || !code || !price || !stock || !category || !thumbnail)
-        return res.status(400).json({error:'Falta ingresar algun campo del producto'})
+        return res.status(400).json({error:'An information field is missing'})
 
     let newProduct = new Product(title, description, price, thumbnail, code, stock, id, category)
-
-    let oldProdIndex = productManager.getProducts().findIndex(product => product.id === id)    
     
-    productManager.updateProductFromPage(oldProdIndex, newProduct)
+    productManager.updateProductFromPage(id, newProduct)
 
     res.status(200).json({message:`The Product: ${title}, has been updated succesfully.`})
 
@@ -119,6 +119,28 @@ router.delete('/:id', (req,res)=>{
     productManager.deleteProduct(id);
 
     res.status(200).json({message:`The Product: ${productToDeleteTitle}, with id: ${id}, has been Deleted succesfully.`})
+
+})
+
+
+
+
+router.post('/test', async(req,res)=>{
+
+    let item = req.body;
+
+    if(!item)
+        return res.status(400).json({error:'Falta ingresar algun campo del producto'})
+
+    try {
+        let newItem=await testModel.create(item)
+    
+        res.status(201).json({newItem})
+        
+    } catch (error) {
+        res.status(500).json({error:'Error inesperado', detalle:error.message})
+        
+    }
 
 })
 

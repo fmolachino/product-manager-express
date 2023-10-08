@@ -1,26 +1,22 @@
-//Handlebars import:
+//Outies
 import handlebars from 'express-handlebars';
-
 import express from 'express';
-
 import { Server } from 'socket.io';
-
-import {router as productsRouter} from './routes/products.router.js';
-
-import {router as cartsRouter} from './routes/carts.router.js';
-
-import {router as viewsRouter} from './routes/views.router.js'
-
+import mongoose from 'mongoose'
 import path from 'path';
 
-import __dirname from './utils.js';
+//js imports
+import {router as productsRouter} from './routes/products.router.js';
+import {router as cartsRouter} from './routes/carts.router.js';
+import {router as viewsRouter} from './routes/views.router.js'
 
+//Customs
+import __dirname from './utils.js';
 import { ProductManager } from './productsHandler.js';
 
 
 //--------------------------------
 let productsPath = path.join(__dirname, 'files', 'products.json');
-
 const productManager = new ProductManager(productsPath)
 const products = productManager.getProducts();
 //--------------------------------
@@ -73,6 +69,15 @@ serverSocket.on('connection', (socket)=>{
 
 setInterval(() => {
     serverSocket.emit('updatedProducts', products, new Date().toUTCString())
-    console.log(products[0].title);
     
 }, 3000)
+
+
+//Mongodb configs
+
+try {
+    await mongoose.connect('mongodb+srv://fmolachino:coderhousetpfinal@mongodbcluster00.qk1igyb.mongodb.net/?retryWrites=true&w=majority&dbName=ecommerce')
+    console.log('Connected to MongoDB - fershop db')
+} catch (error) {
+    console.log(error.message)    
+}

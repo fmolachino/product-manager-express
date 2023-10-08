@@ -2,7 +2,6 @@
 
 import fs from 'fs';
 
-
 import path from 'path'
 import __dirname from './utils.js'
 
@@ -10,14 +9,11 @@ export class ProductManager{
 
     #productList = [];
 
-    static #idProvider = 0;
-
-    
+    static #idProvider = 0;    
 
     constructor(path) {
         this.#productList = [];
-        this.path = path;
-        
+        this.path = path;        
         this.loadFromFile(); // When instanciated, it loads the file, so whenever i create a ProductManager...
     }
 
