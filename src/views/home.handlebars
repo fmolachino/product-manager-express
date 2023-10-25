@@ -3,11 +3,31 @@
     <ul>
         {{#each products}}
             <li>{{this.title}} - ${{this.price}}</li>
-            
         {{/each}}
     </ul>
 
+    <br>
 
+<span>Current Page: {{page}} / {{totalPages}}</span>
+
+    <br>
+    <br>
+
+<a class="nav-page" href="/?limit={{limit}}&page=1">First Page</a>
+
+{{#if hasPrevPage}}
+    <a class="nav-page" href="/?limit={{limit}}&page={{prevPage}}">Previous Page</a>
+{{else}}
+    <span>Prev.Pág.</span>
+{{/if}}
+
+{{#if hasNextPage}}
+    <a class="nav-page" href="/?limit={{limit}}&page={{nextPage}}">Next Page</a>
+{{else}}
+    <span>Next Page</span>
+{{/if}}
+
+<a class="nav-page" href="/?limit={{limit}}&page={{totalPages}}">Last Page</a>
 
 
 

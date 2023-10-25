@@ -5,6 +5,8 @@ import fs from 'fs';
 import { productsModel } from '../models/products.model.js';
 
 import path from 'path'
+import { model } from 'mongoose';
+import mongoose from 'mongoose';
 //import __dirname from './utils.js'
 
 export class ProductManager {
@@ -64,8 +66,13 @@ export class ProductManager {
         }
     }
 
-    getProducts() {
-        return this.#productList
+    async getProducts() {
+        try{
+            let products = await productsModel.find();
+            return productsModel;
+        } catch(err){
+            console.error(err)
+        }
     }
 
     async getProductById(id) {
@@ -165,7 +172,23 @@ export class ProductManager {
         return this.#productList
     }
 
+    async getPaginatedProducts(limit, lean, page, sort){
+
+        let products = {};
+
+        if(sort==="asc"){
+            products = await productsModel.paginate({}, {limit: limit, lean: lean, page: page, sort: {price: 1}})
+        } else if (sort==="desc"){
+            products = await productsModel.paginate({}, {limit: limit, lean: lean, page: page, sort: {price: -1}})
+        } 
+        else products = await productsModel.paginate({}, {limit: limit, lean: lean, page: page})
+        
+        return products
+    }
+
 }
+
+
 
 
 
