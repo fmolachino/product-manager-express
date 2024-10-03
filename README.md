@@ -18,9 +18,9 @@ This is an e-commerce web application built using Express, Handlebars, Socket.IO
 ## Setup and Installation
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/fmolachino/product-manager-express.git
-   ```
+  ```bash
+  git clone https://github.com/fmolachino/product-manager-express.git
+  ```
 
 2. Install the necessary dependencies:
   ```bash
